@@ -1,24 +1,32 @@
 <?php
 //messages
 $lang['orders:no_items']		=	'There is no any order yet';
-$lang['orders:no_category_items']		=	'No orders found for this category';
 $lang['orders:unknown_category']	=	'Unknown Category';
 
-//page titles
-$lang['orders:create']		=	'Add a product';
-$lang['orders:edit']			=	'Edit a product';
+//title
+$lang['orders:view']	=	'View Order';
+$lang['orders:item_list']		=	'Order list';
 
 //labels
 $lang['orders:all_orders']	=	'All orders';
-$lang['orders:name']			=	'Name';
-$lang['orders:category']		=	'Category';
-$lang['orders:price']			=	'Price';
-$lang['orders:no_category']	=	'No category';
+$lang['orders:order_detail']	=	'Order Detail';
+$lang['orders:update_status']	=	'Update Status';
+$lang['orders:customer']			=	'Customer';
+$lang['orders:customer_detail']			=	'Customer Detail';
+$lang['orders:customer_address']			=	'Customer Address';
+
+$lang['orders:order_items']			=	'Order Items';
+$lang['orders:order_code']		=	'Order Code';
+$lang['orders:ordered_on']			=	'Ordered On';
+$lang['orders:status']	=	'Status';
+
 $lang['orders:description']	=	'Description';
-$lang['orders:image']			=	'Image';
-$lang['orders:select_image']	=	'Select a image';
+$lang['orders:product_name']			=	'Product Name';
+$lang['orders:product_code']			=	'Product Code';
+$lang['orders:price']			=	'Price';
+$lang['orders:qty']			=	'Qty';
+$lang['orders:total']	=	'Total';
 $lang['orders:thumbnail']		=	'Thumbnail';
-$lang['orders:item_list']		=	'Order list';
 
 //buttons
 $lang['orders:orders']				=	'orders';

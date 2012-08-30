@@ -22,14 +22,7 @@ class Module_Products extends Module {
             'sections' => array(
                 'orders' => array(
                     'name' => 'orders:label',
-                    'uri' => 'admin/products/orders',
-                    'shortcuts' => array(
-                        'create' => array(
-                            'name' => 'orders:create',
-                            'uri' => 'admin/products/orders/create',
-                            'class' => 'add'
-                        )
-                    )
+                    'uri' => 'admin/products/orders'
                 ),
                 'products' => array(
                     'name' => 'products:label',
@@ -182,6 +175,15 @@ class Module_Products extends Module {
                 'confirmed' => array('type' => 'TINYINT', 'constraint' => 1, 'default' => 0)
             )            
         );
+
+        $order_status = "INSERT INTO `default_simpleshop_order_status` (`id`, `status`, `slug`) VALUES
+            (1, 'Pending', 'pending'),
+            (2, 'Processing', 'processing'),
+            (3, 'Shipped', 'shipped'),
+            (4, 'On Hold', 'onhold'),
+            (5, 'Cancelled', 'cancelled'),
+            (6, 'Delivered', 'delivered');";
+        $this->db->query($order_status);
 
         // setting items
         $thumbnail_width = array(

@@ -51,66 +51,25 @@ class Admin_orders extends Admin_Controller
 			->build('admin/orders/items');
 	}
 
-	public function create()
-	{
-		$this->form_validation->set_rules($this->item_validation_rules);
-
-		if($this->form_validation->run())
-		{
-			if($this->custom_fields_m->create($this->input->post()))
-			{
-				$this->session->set_flashdata('success', lang('general:success'));
-				redirect('admin/'.$this->module.'/fields');
-			}
-			else
-			{
-				$this->session->set_flashdata('error', lang('general:error'));
-				redirect('admin/'.$this->module.'/fields/create');
-			}
-		}
-		
-		foreach ($this->item_validation_rules AS $rule)
-		{
-			$fields->{$rule['field']} = $this->input->post($rule['field']);
-		}
-
-		$this->template
-			->title($this->module_details['name'], lang('fields:create'))
-			->append_metadata( $this->load->view('fragments/wysiwyg', $this->data, TRUE) )
-			->set('fields', $fields)
-			->build('admin/fields/form');
-	}
-	
-	public function edit($id = 0)
+	public function view($id = 0)
 	{
 		$id = $this->uri->segment(5);
 		$id or redirect('admin/'.$this->module);
 		
-		$fields = $this->custom_fields_m->get($id);
+		$order = $this->orders_m->get($id);
+		$products = $this->orders_m->get_order_products($id);
+		$status = array();
+		foreach($this->orders_m->get_order_status() as $value){
+			$status[$value->id] = $value->status;
+		};
 
-		$this->form_validation->set_rules($this->item_validation_rules);
 
-		if($this->form_validation->run())
-		{
-			unset($_POST['btnAction']);
-			
-			if($this->custom_fields_m->update($id, $this->input->post()))
-			{
-				$this->session->set_flashdata('success', lang('general:success'));
-				redirect('admin/'.$this->module.'/fields');
-			}
-			else
-			{
-				$this->session->set_flashdata('error', lang('general:error'));
-				redirect('admin/'.$this->module.'/fields/create');
-			}
-		}
-		
 		$this->template
-			->title($this->module_details['name'], lang('fields:edit'))
-			->append_metadata( $this->load->view('fragments/wysiwyg', $this->data, TRUE) )
-			->set('fields', $fields)
-			->build('admin/fields/form');
+			->title($this->module_details['name'], lang('orders:view'))
+			->set('order', $order)
+			->set('products', $products)
+			->set('status', $status)
+			->build('admin/orders/detail');
 	}
 	
 	public function delete($id = 0)

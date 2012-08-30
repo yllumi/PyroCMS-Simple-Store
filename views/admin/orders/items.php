@@ -3,7 +3,7 @@
 </section>
 
 <section class="item">
-	<?php echo form_open('admin/products/delete');?>
+	<?php echo form_open('admin/orders/delete');?>
 	
 	<?php if (!empty($items)): ?>
 	
@@ -11,8 +11,10 @@
 			<thead>
 				<tr>
 					<th><?php echo form_checkbox(array('name' => 'action_to_all', 'class' => 'check-all'));?></th>
-					<th><?php echo lang('products:name'); ?></th>
-                    <th><?php echo lang('products:category'); ?></th>
+					<th><?php echo lang('orders:order_code'); ?></th>
+					<th><?php echo lang('orders:customer'); ?></th>
+                    <th><?php echo lang('orders:ordered_on'); ?></th>
+                    <th><?php echo lang('orders:status'); ?></th>
 					<th></th>
 				</tr>
 			</thead>
@@ -27,12 +29,13 @@
 				<?php foreach( $items as $item ): ?>
 				<tr>
 					<td><?php echo form_checkbox('action_to[]', $item->id); ?></td>
-					<td><?php echo $item->name; ?></td>
-                    <td><?php echo $item->category_name ? $item->category_name : lang('products:no_category'); ?></td>
+					<td><?php echo $item->order_code; ?></td>
+                    <td><?php echo $item->firstname .' '.$item->lastname; ?></td>
+                    <td><?php echo date("d F Y H:i:s", strtotime($item->ordered_on)); ?></td>
+                    <td><strong><?php echo $item->status; ?></strong></td>
 					<td class="actions">
 						<?php echo
-						anchor('admin/products/edit/'.$item->id, lang('general:edit'), 'class="button"').' '.
-						anchor('admin/products/delete/'.$item->id, 	lang('general:delete'), array('class'=>'button')); ?>
+						anchor('admin/products/orders/view/'.$item->id, lang('general:view'), 'class="button"'); ?>
 					</td>
 				</tr>
 				<?php endforeach; ?>

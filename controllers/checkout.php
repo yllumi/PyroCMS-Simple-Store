@@ -127,6 +127,7 @@ class Checkout extends Public_Controller {
 
         $this->load->library('email');
         // set some data for sending email
+        $data['customer'] = $this->session->userdata('customer');
         $data['subject']    = $this->settings->site_name . ' - Order Invoice';
         $data['slug']       = 'order_invoice';
         $data['to']         = $data['customer']['email'];
@@ -134,7 +135,6 @@ class Checkout extends Public_Controller {
         $data['name']       = $this->settings->site_name;
         $data['reply-to']   = $this->settings->contact_email;
         // Add in some extra details
-        $data['customer'] = $this->session->userdata('customer');
         $data['order_items'] = $this->cart->contents();
         $data['total'] = $this->cart->total();
         $data['ordercode'] = $this->session->userdata('ordercode');       
