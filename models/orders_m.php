@@ -51,5 +51,38 @@ class Orders_m extends MY_Model {
     public function get_order_status() {
         return $this->db->get('simpleshop_order_status')->result();
     }
+    
+    function save_customer_info($data) {
+        $this->db->insert('simpleshop_customers', $data);
+        return $this->db->insert_id();
+    }
+
+    function save_order($total, $orders_data, $customer) {
+        $order = array(
+            'customer_id' => $customer['customer_id'],
+            'ordered_on' => date('Y-m-d H:i:s'),
+            'shipped_on' => date('Y-m-d H:i:s'),
+            'subtotal' => $total,
+            'shipping' => 0,
+            'tax' => 0,
+            'total' => $total,
+            'status' => 1,
+            'order_code' => random_string('numeric', 8)
+        );
+        $this->db->insert('simpleshop_orders', $order);
+        $order_id = $this->db->insert_id();
+        
+        foreach ($orders_data as $order_data) {
+            $order_items = array(
+                'order_id' => $order_id,
+                'product_id' => $order_data['id'],
+                'quantity' => $order_data['qty'],
+                'price' => $order_data['price'],
+                'total' => $order_data['subtotal']
+            );
+            $this->db->insert('simpleshop_order_items', $order_items);
+        };
+        return $order['order_code'];
+    }
 
 }
