@@ -38,6 +38,36 @@ class Orders_m extends MY_Model {
         $query = $this->db->get();
         return $query->row();
     }
+    
+    public function get_for_cart($slug) {
+        $this->db->from('simpleshop_products')->where('slug', $slug);
+
+        $query = $this->db->get();
+        $product = $query->row_array();
+
+        $this->db->from('simpleshop_products_x_fields as x')
+                ->join('simpleshop_fields as f', 'f.id = x.field', 'left')
+                ->where('x.product', $product['id']);
+
+        $query = $this->db->get();
+        $fields = $query->result_array();
+
+        foreach ($fields as $field) {
+            // Put the custom fields in there own array
+            $custom_field[$field['slug']] = $field['value'];
+
+            // And also in the main array for easy refference
+            if (!isset($product[$field['slug']])) {
+                // Only if the array not already contains the key
+                $product[$field['slug']] = $field['value'];
+            }
+        }
+        if (isset($custom_field)) {
+            $product['custom_fields'] = $custom_field;
+        }
+
+        return $product;
+    }
 
     public function get_order_products($order_id){
         $this->db->from('simpleshop_order_items as i')
