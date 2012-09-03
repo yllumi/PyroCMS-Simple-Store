@@ -176,6 +176,10 @@ class Module_Products extends Module {
             )            
         );
 
+        if (!$this->install_tables($tables)) {
+            return false;
+        }
+
         $order_status = "INSERT INTO `default_simpleshop_order_status` (`id`, `status`, `slug`) VALUES
             (1, 'Pending', 'pending'),
             (2, 'Processing', 'processing'),
@@ -311,10 +315,6 @@ class Module_Products extends Module {
             'is_gui' => 1,
             'module' => 'products'
         );
-
-        if (!$this->install_tables($tables)) {
-            return false;
-        }
 
         if (!$this->db->insert('settings', $thumbnail_width)) {
             return FALSE;
