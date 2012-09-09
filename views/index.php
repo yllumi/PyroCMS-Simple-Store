@@ -11,7 +11,7 @@
 			<?php foreach($items as $item) : ?>
 			<div class="product-item">
 				<a href="<? echo base_url().$this->module?>/product/<?php echo $item->slug?>">
-					<img src="<?=base_url().'uploads/default/products/'.$item->thumbnail ?>" alt="<?php echo $item->name ?>" />
+					<img src="<?=base_url().'uploads/default/products/'.$item->thumbnailname ?>" alt="<?php echo $item->name ?>" />
 				</a>
 				<div class="product-desc">
 					<div class="product-name">

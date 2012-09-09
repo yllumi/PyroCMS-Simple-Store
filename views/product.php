@@ -11,7 +11,7 @@
             <table cellpadding="0" cellspacing="0" style="width:100%">
                 <tr>
                     <td width="210px">
-                        <img src="<?= base_url() . 'uploads/default/products/' . $items->image ?>" alt="<?php echo $items->name ?>" />
+                        <img src="<?= base_url() . 'uploads/default/products/' . $items->filename ?>" alt="<?php echo $items->name ?>" />
                     </td>
                     <td style="vertical-align: top; padding: 0 10px;">
                         <table>
