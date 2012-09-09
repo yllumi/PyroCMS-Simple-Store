@@ -268,7 +268,7 @@ class Admin extends Admin_Controller {
 					'delete_title' => lang("products:delete_image"),
 					'set_default' => lang("products:set_default"),
 					'current_default' => lang("products:current_default"),
-					'idt' => $rslt,
+					'image_dt' => $rslt,
 					'thumb_width' => $this->settings->thumbnail_width
 				);
 			}else{
