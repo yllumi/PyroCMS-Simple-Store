@@ -180,7 +180,7 @@ class Module_Products extends Module {
                 'filename' => array('type' => 'VARCHAR', 'constraint' => 200),
                 'thumbnailname' => array('type' => 'VARCHAR', 'constraint' => 200, 'default' => ''),
                 'uploadedname' => array('type' => 'VARCHAR', 'constraint' => 200),
-                'isdefault' => array('type' => 'BOOLEAN', 'default' => false)
+                'isdefault' => array('type' => 'BOOLEAN', 'default' => 0)
             )         
         );
 
