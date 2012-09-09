@@ -28,9 +28,12 @@ $lang['products:subtotal']		= 'Sub-Total';
 $lang['products:shipping']		= 'Shipping';
 
 //buttons
-$lang['products:products']		= 'Products';
+$lang['products:products']			= 'Products';
 $lang['products:upload_image']		= 'Upload image';
 $lang['products:delete_image']		= 'Delete image';
+$lang['products:set_default']		= 'Set Default';
+$lang['products:current_default']	= 'Default';
+$lang['products:delete_x']		= 'X';
 $lang['products:add_category']		= 'Add category';
 $lang['products:update_cart']		= 'Update Cart';
 $lang['products:payment']   		= "Finish";
@@ -41,4 +44,5 @@ $lang['products:empty_cart']   		= "Empty Cart";
 // Form
 $lang['products:product_label']		= 'Product';
 $lang['products:image_label']		= 'Image';
+$lang['products:image_save_first']	= 'Save the product first before uploading images';
 ?>

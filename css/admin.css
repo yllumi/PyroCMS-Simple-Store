@@ -1,3 +1,7 @@
 .progress { position:relative; width:265px; padding: 1px; border-radius: 3px; margin-top: 5px; color: #000 !important; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); border: 1px solid #003F81; }
 .bar { background-color: #0064CD; background-image: -moz-linear-gradient(#049CDB, #0064CD); background-repeat: repeat-x; width:0%; height:20px; border-radius: 3px; }
 .percent { position:absolute; display:inline-block; top:3px; left:48%; }
+
+.imgBox{float: left; margin:1px 1px 10px 1px;}
+.imgBox a.btn{margin:2px 2px 2px 0;}
+.imgBox .imgContent{border: 1px solid #D3D3D3; border-radius: 5px 5px 5px 5px; padding: 5px; margin-right: 10px;}

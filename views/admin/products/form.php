@@ -80,18 +80,37 @@
         <!-- Content tab -->
         <div class="form_inputs" id="products-image">
             <fieldset>
-                <ul>
+                <ul class="info_img">
+					<li>
+						<?php echo lang('products:image_save_first'); ?>
+					</li>
+                </ul>
+                <ul class="form_img">
+					<?php 
+					if(empty($products->id) or empty($products->thumbnail)){
+						$imgsrc = site_url($this->module_details['path'].'/img/noimage/no_photo_trans_small.gif');
+					}else{
+						if(empty($images)){
+							$imgsrc = site_url($this->module_details['path'].'/img/noimage/no_photo_trans_small.gif');
+						}else{
+							$imgsrc = ''; //site_url(UPLOAD_PATH.$this->module. '/' . $products->thumbnail).'#/'.$this->settings->thumbnail_width . 'x' . $this->settings->thumbnail_height;
+						}
+					}
+					?>
                     <li class="<?php echo alternator('', 'even'); ?>">
                         <label for="file"><?php echo lang('products:image'); ?></label><br /><br />
-                        <div style="clear: both; height: <?php echo $this->settings->thumbnail_height ?>;">
-                            <div style="float: left;">
-                                <div id="thumbnail" style="border: 1px solid #D3D3D3; border-radius: 5px 5px 5px 5px; padding: 5px; width: <?php echo $this->settings->thumbnail_width ?>; margin-right: 10px;">
-                                    <img src="<?php echo $products->thumbnail ? base_url() . 'uploads/' . SITE_REF . '/' . $this->module . '/' . $products->thumbnail : 'http://placehold.it/' . $this->settings->thumbnail_width . 'x' . $this->settings->thumbnail_height ?>" alt="<?php echo lang('products:image'); ?>" />
-                                </div><br />
-                                <a id="delete-image-button" class="btn red" href="#"><?php echo lang('products:delete_image'); ?></a>
+                        <input type="hidden" id="prm_post_dt" value="<?php echo empty($products->id) ? 0 : $products->id; ?>" />
+                        <div id="img_list" style="clear: both; height: <?php echo $this->settings->thumbnail_height ?>;">
+                            <div class="imgBox" id="img_no_img">
+                                <div id="thumbnail" class="imgContent" style="width: <?php echo $this->settings->thumbnail_width ?>;">
+                                    <img src="<?php echo $imgsrc; ?>" alt="<?php echo lang('products:image'); ?>" />
+                                </div>
                             </div>
-                            <div style="float: left;">
-                                <?php echo form_open_multipart(base_url() . 'index.php/admin/' . $this->module . '/ajax_upload_image', 'id="ajax-form-upload"'); ?>
+                            <div style="float: left; margin-left: 20px;">
+                                <?php 
+                                $upload_id = empty($products->id) ? 0 : $products->id;
+                                $action_path = site_url('admin/' . $this->module . '/ajax_upload_image/'. $upload_id);
+                                echo form_open_multipart($action_path, 'id="ajax-form-upload"'); ?>
                                 <input type="file" name="file"><br />
                                 <input type="submit" value="<?php echo lang('products:upload_image'); ?>">
                                 <?php echo form_close(); ?>
@@ -121,5 +140,11 @@
                 });
             };
         }));
+        var idp = <?php echo empty($products->id) ? 0 : $products->id; ?>;
+        if(idp > 0){
+			$('#products-image .info_img').css('display', 'none');
+		}else{
+			$('#products-image .form_img').html('<li>&nbsp;</li>');
+		}
     });
 </script>

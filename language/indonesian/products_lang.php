@@ -28,9 +28,12 @@ $lang['products:subtotal']		= 'Sub-Total';
 $lang['products:shipping']		= 'Biaya Pengiriman';
 
 //buttons
-$lang['products:products']				=	'Produk';
-$lang['products:upload_image']			=	'Unggah Gambar';
-$lang['products:delete_image']			=	'Hapus Gambar';
+$lang['products:products']			=	'Produk';
+$lang['products:upload_image']		=	'Unggah Gambar';
+$lang['products:delete_image']		=	'Hapus Gambar';
+$lang['products:set_default']		= 'Set Default';
+$lang['products:current_default']	= 'Default';
+$lang['products:delete_x']		= 'X';
 $lang['products:add_category']			=	'Tambah Kategori';
 $lang['products:update_cart']		= 'Perbaharui Keranjang';
 $lang['products:payment']   		= "Selesai";
@@ -41,4 +44,5 @@ $lang['products:empty_cart']   		= "Kosongkan Keranjang";
 // Form
 $lang['products:product_label']		=	'Produk';
 $lang['products:image_label']		=	'Gambar';
+$lang['products:image_save_first']	= 'Simpan produk dulu sebelum mengupload gambar';
 ?>

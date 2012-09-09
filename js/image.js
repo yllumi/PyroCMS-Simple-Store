@@ -23,37 +23,86 @@ $(document).ready(function() {
 			
 			$('.progress').hide();
 			
-			// Delete old image first
-			$.post(SITE_URL + 'admin/products/ajax_delete_image/', {
-				thumbnail: $('input[name="thumbnail"]').val(),
-				image: $('input[name="image"]').val(),
-				csrf_hash_name: $.cookie("default_csrf_cookie_name")
-			},
-			function(data) {});
-			
 			var obj = jQuery.parseJSON(xhr.responseText);
 	
-			$('input[name="thumbnail"]').val(obj.thumbnail);
-			$('input[name="image"]').val(obj.image);
-			$('#thumbnail img').attr('src', obj.upload_path + obj.thumbnail);
+			if(obj.status == 1){
+			
+				  if(obj.image_default == 1){
+					  var btnDefault = '<a class="btn gray" href="#" title="'+obj.current_default+'" ref="'+obj.image_dt+'">'+obj.current_default+'</a>';
+				  }else{
+					  var btnDefault = '<a class="btn green set-default-button" href="#" title="'+obj.set_default+'" ref="'+obj.image_dt+'">'+obj.set_default+'</a>';
+				  }
+				  
+				var result_html = '<div class="imgBox imgDt"><div id="thumbnail" class="imgContent" style="width: '+obj.thumb_width+'px;"><img src="'+obj.upload_path + obj.thumbnail+'" alt="'+obj.products_image+'" /></div><a class="btn red delete-image-button" href="#" title="'+obj.delete_title+'" ref="'+obj.idt+'">'+obj.delete_image+'</a>'+btnDefault+'</div>';
+		
+				$('#img_no_img').before(result_html); 
+			}
 		}
 	}); 
 	
-	$('a#delete-image-button').live("click", function(e){
-			$.post(SITE_URL + 'admin/products/ajax_delete_image/', {
-				thumbnail: $('input[name="thumbnail"]').val(),
-				image: $('input[name="image"]').val(),
-				csrf_hash_name: $.cookie("default_csrf_cookie_name")
-			},
-			function(data) {
-				
-				var obj = jQuery.parseJSON(data);
-				
-				$('input[name="thumbnail"]').val('');
-				$('input[name="image"]').val('');
-				$('#thumbnail img').attr('src', 'http://placehold.it/'+obj.width+'x'+obj.height);
+	$('a.delete-image-button').live("click", function(e){
+		e.preventDefault();
+		var isDel = window.confirm("Delete the images ?");
+		if(isDel){
+			var objCurrent = $(this);
+			var refresh_url = SITE_URL + 'admin/products/ajax_delete_image/' + $(this).attr('ref');
+			$.ajax({
+			  url: refresh_url,
+			  success: function(data) {
+				  var obj = jQuery.parseJSON(data);
+				  if(obj.status == 1){
+					  objCurrent.parent().remove();
+					  return true;
+				  }
+				}
 			});
+		}else{
 			return false;
+		}
+	});  
+	
+	$('a.set-default-button').live("click", function(e){
+		e.preventDefault();
+		
+		var objCurrent = $(this);
+		var refresh_url = SITE_URL + 'admin/products/ajax_set_default/' + $(this).attr('ref');
+		$.ajax({
+		  url: refresh_url,
+		  success: function(data) {
+			  var obj = jQuery.parseJSON(data);
+			  if(obj.status == 1){
+				  $('div.imgBox.imgDt').each(function(i, ele){
+					  $(ele).remove();
+				  });
+				  loadImages();
+			  }
+			}
+		});
+		
 	});  
 
+	var loadImages = function(){
+		var refresh_url = SITE_URL + 'admin/products/ajax_images/' + $('#prm_post_dt').val();
+        $.ajax({
+          url: refresh_url,
+          success: function(data) {
+			  var obj = jQuery.parseJSON(data);
+			  if(obj.status == 1){	
+				  for(var k in obj.result){
+					  
+					  if(obj.result[k].image_default == 1){
+						  var btnDefault = '<a class="btn gray" href="#" title="'+obj.result[k].current_default+'" ref="'+obj.result[k].image_dt+'">'+obj.result[k].current_default+'</a>';
+					  }else{
+						  var btnDefault = '<a class="btn green set-default-button" href="#" title="'+obj.result[k].set_default+'" ref="'+obj.result[k].image_dt+'">'+obj.result[k].set_default+'</a>';
+					  }
+					  var result_html = '<div class="imgBox imgDt"><div id="thumbnail" class="imgContent" style="width: '+obj.result[k].thumb_width+'px;"><img src="'+obj.ipath + obj.result[k].image_thumbnail+'" alt="'+obj.result[k].products_image+'" /></div><a class="btn red delete-image-button" href="#" title="'+obj.result[k].delete_title+'" ref="'+obj.result[k].image_dt+'">'+obj.result[k].delete_image+'</a>'+btnDefault+'</div>';
+					  $('#img_no_img').before(result_html); 
+					  
+				  }
+			  }
+          }
+        });
+	};
+	
+	loadImages();
 });

@@ -155,22 +155,24 @@ class Products_m extends MY_Model {
             'description' => $input['description']
         );
 
-        $this->db->insert($this->_table, $to_insert);
+        $result = $this->db->insert($this->_table, $to_insert);
 
-        if (isset($input['custom_field'])) {
+		if($result){
+			$result = $this->db->insert_id();
+			if (isset($input['custom_field'])) {
 
-            $product = $this->db->insert_id();
-            foreach ($input['custom_field'] as $field => $value) {
-                $to_insert = array(
-                    'product' => $product,
-                    'field' => $field,
-                    'value' => $value
-                );
+				foreach ($input['custom_field'] as $field => $value) {
+					$to_insert = array(
+						'product' => $result,
+						'field' => $field,
+						'value' => $value
+					);
 
-                $this->db->insert('simpleshop_products_x_fields', $to_insert);
-            }
-        }
-        return true;
+					$this->db->insert('simpleshop_products_x_fields', $to_insert);
+				}
+			}
+		}
+        return $result;
     }
 
     //make sure the slug is valid

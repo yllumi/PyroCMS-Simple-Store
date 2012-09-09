@@ -172,8 +172,16 @@ class Module_Products extends Module {
                 'phone' => array('type' => 'VARCHAR', 'constraint' => 32),
                 'password' => array('type' => 'VARCHAR', 'constraint' => 40, 'null' => true),
                 'active' => array('type' => 'TINYINT', 'constraint' => 1, 'default' => 0),
-                'confirmed' => array('type' => 'TINYINT', 'constraint' => 1, 'default' => 0)
-            )            
+                'confirmed' => array('type' => 'TINYINT', 'constraint' => 1, 'default' => 0)  
+            ),
+            'simpleshop_images' => array(
+                'id' => array('type' => 'INT', 'constraint' => 11, 'auto_increment' => true, 'primary' => true),
+                'product_id' => array('type' => 'INT', 'constraint' => 11),
+                'filename' => array('type' => 'VARCHAR', 'constraint' => 200),
+                'thumbnailname' => array('type' => 'VARCHAR', 'constraint' => 200, 'default' => ''),
+                'uploadedname' => array('type' => 'VARCHAR', 'constraint' => 200),
+                'isdefault' => array('type' => 'BOOLEAN', 'default' => false)
+            )         
         );
 
         if (!$this->install_tables($tables)) {
@@ -370,6 +378,7 @@ class Module_Products extends Module {
         $this->dbforge->drop_table('simpleshop_order_items');
         $this->dbforge->drop_table('simpleshop_order_status');
         $this->dbforge->drop_table('simpleshop_customers');
+        $this->dbforge->drop_table('simpleshop_images');
         
 
         $this->db->delete('settings', array('module' => 'products'));
