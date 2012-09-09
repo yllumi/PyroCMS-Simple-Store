@@ -103,8 +103,6 @@ class Module_Products extends Module {
                 'name' => array('type' => 'VARCHAR', 'constraint' => 255, 'default' => ''),
                 'slug' => array('type' => 'VARCHAR', 'constraint' => 20, 'default' => '', 'unique' => true),
                 'category' => array('type' => 'INT', 'constraint' => 11),
-                'thumbnail' => array('type' => 'VARCHAR', 'constraint' => 255, 'default' => ''),
-                'image' => array('type' => 'VARCHAR', 'constraint' => 255, 'default' => ''),
                 'description' => array('type' => 'TEXT'),
                 'price' => array('type' => 'INT', 'constraint' => 11, 'null' => true),
                 'min_buy' => array('type' => 'INT', 'constraint' => 11, 'default' => 1)
