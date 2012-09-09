@@ -188,7 +188,7 @@ class Module_Products extends Module {
             return false;
         }
 
-        $order_status = "INSERT INTO `default_simpleshop_order_status` (`id`, `status`, `slug`) VALUES
+        $order_status = "INSERT INTO `".$this->db->dbprefix('simpleshop_order_status')."` (`id`, `status`, `slug`) VALUES
             (1, 'Pending', 'pending'),
             (2, 'Processing', 'processing'),
             (3, 'Shipped', 'shipped'),
