@@ -37,11 +37,12 @@ class Products extends Public_Controller {
         } else {
             $data->items_exist = FALSE;
         }
-
+        
         // Params: (module/method, total count, limit, uri segment)
         $data->pagination = create_pagination('products/index', $this->products_m->count_all(), $limit, 3);
 
         $this->template->title($this->module_details['name'], lang('products:label'))
+				->append_css('module::public.css')
                 ->build('index', $data);
     }
 
@@ -54,10 +55,15 @@ class Products extends Public_Controller {
 
         if (count($data->items)) {
             $data->items_exist = TRUE;
+            print_r($data->items);
+            $this->load->model('images_m');
+			$data->items_images = $this->images_m->get_by_product($data->items->id);
         } else {
             $data->items_exist = FALSE;
+            $data->items_images = false;
         }
 
+		
 //		echo "<pre>";
 //		print_r($data);
 //		die();
@@ -65,6 +71,7 @@ class Products extends Public_Controller {
         $data->fields = $this->custom_fields_m->get_all();
 
         $this->template->title($this->module_details['name'], '')
+				->append_css('module::public.css')
                 ->build('product', $data);
     }
 

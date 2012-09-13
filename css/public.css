@@ -1,0 +1,78 @@
+.product-item{
+  display: block; float:left; clear:right; 
+}
+
+.product-item a{
+  display: block; position:relative; width: 100%; height:100%;
+}
+.product-item a .imgbox{
+  height:145px; width:156px; margin:1px 0 3px 0; padding:0; display: block; overflow:hidden; text-align:center;
+}
+.product-item a .imgbox img{
+  border: none; margin:0; padding:0; 
+}
+
+.product-item a .product-desc{
+  width: 100%; text-align:center;
+}
+
+.product-item a .product-desc .product-name{
+  margin:1px 0 3px 0; text-shadow:none; 
+}
+
+.product-item a .product-desc .product-price{
+  margin:1px 0 3px 0; text-shadow:none; font-size: 14px; color:#000000;
+}
+
+div.product-images{
+  text-align:center; width:100%; 
+}
+
+div.product-images img{
+  border:none; border-radius:4px; margin: 0 12px 12px 0;
+}
+
+div.product-details label{
+  float:left; width: 28%;
+}
+
+div.product-details span{
+  float:left; width: 68%;
+}
+
+br.cboth{
+  clear:both;
+}
+
+.bx{
+  width: 160px; height: 180px; display: inline-block;
+  padding: 6px 10px;
+  text-shadow: 0 1px 1px #332b13;
+  font-size: 14px; font-weight:bold; line-height: 14px;
+  margin: 3px 6px 3px 0px ; border-radius: 4px;
+}
+
+.bbtn{
+  /*height: 20px; */display: inline-block;
+  padding: 2px 6px;
+  text-shadow: 0 1px 1px #332b13;
+  font-size: 12px; font-weight:bold;
+  margin: 3px 5px 3px 0px ; border-radius: 4px;
+}
+
+
+.green{
+  color: #193923;
+  background-color: #84B778;
+  
+  background-repeat: repeat-x;
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#BEEEB6), to(#84B778));
+  background-image: -moz-linear-gradient(#BEEEB6, #84B778);
+  background-image: -ms-linear-gradient(#BEEEB6, #84B778);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #BEEEB6), color-stop(100%, #84B778));
+  background-image: -webkit-linear-gradient(#BEEEB6, #84B778);
+  background-image: -o-linear-gradient(#BEEEB6, #84B778);
+  background-image: linear-gradient(#BEEEB6, #84B778);
+  border: 1px solid #78C666;
+  border-bottom-color: #84B778;
+}
