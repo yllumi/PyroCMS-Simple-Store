@@ -55,7 +55,6 @@ class Products extends Public_Controller {
 
         if (count($data->items)) {
             $data->items_exist = TRUE;
-            print_r($data->items);
             $this->load->model('images_m');
 			$data->items_images = $this->images_m->get_by_product($data->items->id);
         } else {
