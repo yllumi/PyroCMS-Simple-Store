@@ -33,7 +33,7 @@ $(document).ready(function() {
 					  var btnDefault = '<a class="btn green set-default-button" href="#" title="'+obj.set_default+'" ref="'+obj.image_dt+'">'+obj.set_default+'</a>';
 				  }
 				  
-				var result_html = '<div class="imgBox imgDt"><div id="thumbnail" class="imgContent" style="width: '+obj.thumb_width+'px;"><img src="'+obj.upload_path + obj.thumbnail+'" alt="'+obj.products_image+'" /></div><a class="btn red delete-image-button" href="#" title="'+obj.delete_title+'" ref="'+obj.idt+'">'+obj.delete_image+'</a>'+btnDefault+'</div>';
+				var result_html = '<div class="imgBox imgDt"><div id="thumbnail" class="imgContent" style="width: '+obj.thumb_width+'px;"><img src="'+obj.upload_path + obj.thumbnail+'" alt="'+obj.products_image+'" /></div><a class="btn red delete-image-button" href="#" title="'+obj.delete_title+'" ref="'+obj.image_dt+'">'+obj.delete_image+'</a>'+btnDefault+'</div>';
 		
 				$('#img_no_img').before(result_html); 
 			}

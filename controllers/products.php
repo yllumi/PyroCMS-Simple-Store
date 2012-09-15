@@ -37,7 +37,7 @@ class Products extends Public_Controller {
         } else {
             $data->items_exist = FALSE;
         }
-        
+
         // Params: (module/method, total count, limit, uri segment)
         $data->pagination = create_pagination('products/index', $this->products_m->count_all(), $limit, 3);
 
@@ -71,6 +71,9 @@ class Products extends Public_Controller {
 
         $this->template->title($this->module_details['name'], '')
 				->append_css('module::public.css')
+				->append_js('module::jquery.colorbox.min.js')
+				->append_js('module::colorbox.js')
+				->append_css('module::colorbox.css')
                 ->build('product', $data);
     }
 

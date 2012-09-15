@@ -103,8 +103,6 @@ class Module_Products extends Module {
                 'name' => array('type' => 'VARCHAR', 'constraint' => 255, 'default' => ''),
                 'slug' => array('type' => 'VARCHAR', 'constraint' => 20, 'default' => '', 'unique' => true),
                 'category' => array('type' => 'INT', 'constraint' => 11),
-                'thumbnail' => array('type' => 'VARCHAR', 'constraint' => 255, 'default' => ''),
-                'image' => array('type' => 'VARCHAR', 'constraint' => 255, 'default' => ''),
                 'description' => array('type' => 'TEXT'),
                 'price' => array('type' => 'INT', 'constraint' => 11, 'null' => true),
                 'min_buy' => array('type' => 'INT', 'constraint' => 11, 'default' => 1)
@@ -180,7 +178,7 @@ class Module_Products extends Module {
                 'filename' => array('type' => 'VARCHAR', 'constraint' => 200),
                 'thumbnailname' => array('type' => 'VARCHAR', 'constraint' => 200, 'default' => ''),
                 'uploadedname' => array('type' => 'VARCHAR', 'constraint' => 200),
-                'isdefault' => array('type' => 'BOOLEAN', 'default' => false)
+                'isdefault' => array('type' => 'BOOLEAN', 'default' => 0)
             )         
         );
 
@@ -188,7 +186,7 @@ class Module_Products extends Module {
             return false;
         }
 
-        $order_status = "INSERT INTO `default_simpleshop_order_status` (`id`, `status`, `slug`) VALUES
+        $order_status = "INSERT INTO `".$this->db->dbprefix('simpleshop_order_status')."` (`id`, `status`, `slug`) VALUES
             (1, 'Pending', 'pending'),
             (2, 'Processing', 'processing'),
             (3, 'Shipped', 'shipped'),
