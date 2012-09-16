@@ -69,7 +69,7 @@ class Products extends Public_Controller {
 
         $data->fields = $this->custom_fields_m->get_all();
 
-        $this->template->title($this->module_details['name'], '')
+        $this->template->title($this->module_details['name'], $data->items->name)
 				->append_css('module::public.css')
 				->append_js('module::jquery.colorbox.min.js')
 				->append_js('module::colorbox.js')
