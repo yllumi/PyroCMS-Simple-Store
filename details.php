@@ -7,7 +7,7 @@ class Module_Products extends Module {
     public $version = '1.0';
 
     public function info() {
-        return array(
+        $info = array(
             'name' => array(
                 'en' => 'Products',
                 'id' => 'Produk'
@@ -19,11 +19,8 @@ class Module_Products extends Module {
             'frontend' => TRUE,
             'backend' => TRUE,
             'menu' => 'store',
+            'roles' => array('manage_orders', 'manage_custom_fields', 'manage_specials'),
             'sections' => array(
-                'orders' => array(
-                    'name' => 'orders:label',
-                    'uri' => 'admin/products/orders'
-                ),
                 'products' => array(
                     'name' => 'products:label',
                     'uri' => 'admin/products',
@@ -45,8 +42,21 @@ class Module_Products extends Module {
                             'class' => 'add'
                         )
                     )
-                ),
-                'fields' => array(
+                )
+            )
+        );
+        
+        if (group_has_role('products', 'manage_orders'))
+		{
+			$info['sections']['orders'] = array(
+                    'name' => 'orders:label',
+                    'uri' => 'admin/products/orders'
+				);
+		};
+		
+		if (group_has_role('products', 'manage_custom_fields'))
+		{
+			$info['sections']['fields'] = array(
                     'name' => 'fields:label',
                     'uri' => 'admin/products/fields',
                     'shortcuts' => array(
@@ -56,8 +66,12 @@ class Module_Products extends Module {
                             'class' => 'add'
                         )
                     )
-                ),
-                'specials' => array(
+                );
+		};
+		
+		if (group_has_role('products', 'manage_specials'))
+		{
+			$info['sections']['specials'] = array(
                     'name' => 'specials:label',
                     'uri' => 'admin/products/specials',
                     'shortcuts' => array(
@@ -67,13 +81,15 @@ class Module_Products extends Module {
                             'class' => 'add'
                         )
                     )
-                ),
-                'settings' => array(
+                );
+		};
+		
+		$info['sections']['settings'] = array(
                     'name' => 'settings:label',
                     'uri' => 'admin/settings#products'
-                )
-            )
-        );
+                );
+
+		return $info;
     }
 
     public function install() {
@@ -105,7 +121,8 @@ class Module_Products extends Module {
                 'category' => array('type' => 'INT', 'constraint' => 11),
                 'description' => array('type' => 'TEXT'),
                 'price' => array('type' => 'INT', 'constraint' => 11, 'null' => true),
-                'min_buy' => array('type' => 'INT', 'constraint' => 11, 'default' => 1)
+                'min_buy' => array('type' => 'INT', 'constraint' => 11, 'default' => 1),
+                'default_image_id' => array('type' => 'INT', 'constraint' => 11, 'default' => 0)
             ),
             'simpleshop_categories' => array(
                 'id' => array('type' => 'INT', 'constraint' => 11, 'auto_increment' => true, 'primary' => true),
@@ -171,20 +188,16 @@ class Module_Products extends Module {
                 'password' => array('type' => 'VARCHAR', 'constraint' => 40, 'null' => true),
                 'active' => array('type' => 'TINYINT', 'constraint' => 1, 'default' => 0),
                 'confirmed' => array('type' => 'TINYINT', 'constraint' => 1, 'default' => 0)  
-            ),
-            'simpleshop_images' => array(
-                'id' => array('type' => 'INT', 'constraint' => 11, 'auto_increment' => true, 'primary' => true),
-                'product_id' => array('type' => 'INT', 'constraint' => 11),
-                'filename' => array('type' => 'VARCHAR', 'constraint' => 200),
-                'thumbnailname' => array('type' => 'VARCHAR', 'constraint' => 200, 'default' => ''),
-                'uploadedname' => array('type' => 'VARCHAR', 'constraint' => 200),
-                'isdefault' => array('type' => 'BOOLEAN', 'default' => 0)
-            )         
+            )      
         );
 
         if (!$this->install_tables($tables)) {
             return false;
         }
+
+        // Create file folder for images
+        $this->load->library('files/files');
+        Files::create_folder(0, 'Product Images');
 
         $order_status = "INSERT INTO `".$this->db->dbprefix('simpleshop_order_status')."` (`id`, `status`, `slug`) VALUES
             (1, 'Pending', 'pending'),
@@ -358,9 +371,9 @@ class Module_Products extends Module {
             return FALSE;
         }
 
-        if (!is_dir($this->upload_path . 'products') AND !@mkdir($this->upload_path . 'products', 0777, TRUE)) {
-            return FALSE;
-        }
+        //if (!is_dir($this->upload_path . 'products') AND !@mkdir($this->upload_path . 'products', 0777, TRUE)) {
+            //return FALSE;
+        //}
 
         return TRUE;
     }

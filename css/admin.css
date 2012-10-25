@@ -2,6 +2,8 @@
 .bar { background-color: #0064CD; background-image: -moz-linear-gradient(#049CDB, #0064CD); background-repeat: repeat-x; width:0%; height:20px; border-radius: 3px; }
 .percent { position:absolute; display:inline-block; top:3px; left:48%; }
 
-.imgBox{float: left; margin:1px 1px 10px 1px;}
-.imgBox a.btn{margin:2px 2px 2px 0;}
+.imgBox{float: left; margin:1px 1px 10px 1px;position: relative;}
+.imgBox a.btn{margin: 2px 2px 2px 0; position: absolute; top: -10px; padding: 0px 5px; font-size: 10px;}
+.imgBox a.btn.delete-image-button{ right: 0; }
+.imgBox a.btn.set-default-button, .imgBox a.btn.default-button{ right: 20px; }
 .imgBox .imgContent{border: 1px solid #D3D3D3; border-radius: 5px 5px 5px 5px; padding: 5px; margin-right: 10px;}

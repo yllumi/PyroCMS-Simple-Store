@@ -1,6 +1,6 @@
 <div class="products-container">
 
-    <?php if (!$items_exist) : ?>
+    <?php if (!$items) : ?>
         <p><?php echo lang('products:no_items') ?></p>
     <?php else : ?>
 
@@ -10,22 +10,9 @@
 
 			<div class="product-images">
 			<?php
-			$imghtml = '';
-			if(!empty($items_images)){
-				
-				for($k = 0; $k < count($items_images); $k++){
-					$base_path = FCPATH.UPLOAD_PATH.'products/'.$items_images[$k]->thumbnailname;
-					if(file_exists($base_path) && is_file($base_path)){
-						$imgurl = base_url().UPLOAD_PATH.'products/'.$items_images[$k]->thumbnailname;
-						$imghtml .= '<img src="'.$imgurl.'" />';
-					}
-				}
-			}
-			if(empty($imghtml)){
-				$imgurl = base_url().$this->module_details['path'].'/img/noimage/no_photo_trans_small.gif';
+				$imgurl = site_url('files/large/'.$items->images[0]->filename);
 				$imghtml = '<img src="'.$imgurl.'" />';
-			}
-			echo $imghtml
+				echo $imghtml;
 			?>
 			</div>
 			<div class="product-details">

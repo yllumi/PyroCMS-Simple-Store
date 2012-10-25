@@ -3,7 +3,7 @@
 }
 
 .product-item a{
-  display: block; position:relative; width: 100%; height:100%;
+  display: block; position:relative; width: 100%; height:100%; text-decoration: none; color: #783F0B;
 }
 .product-item a .imgbox{
   height:145px; width:156px; margin:1px 0 3px 0; padding:0; display: block; overflow:hidden; text-align:center;
@@ -63,16 +63,4 @@ br.cboth{
 
 .green{
   color: #193923;
-  background-color: #84B778;
-  
-  background-repeat: repeat-x;
-  background-image: -khtml-gradient(linear, left top, left bottom, from(#BEEEB6), to(#84B778));
-  background-image: -moz-linear-gradient(#BEEEB6, #84B778);
-  background-image: -ms-linear-gradient(#BEEEB6, #84B778);
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #BEEEB6), color-stop(100%, #84B778));
-  background-image: -webkit-linear-gradient(#BEEEB6, #84B778);
-  background-image: -o-linear-gradient(#BEEEB6, #84B778);
-  background-image: linear-gradient(#BEEEB6, #84B778);
-  border: 1px solid #78C666;
-  border-bottom-color: #84B778;
 }

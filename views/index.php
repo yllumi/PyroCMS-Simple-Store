@@ -11,14 +11,12 @@
 			<?php foreach($items as $item) : ?>
 			<div class="product-item bx green">
 				<?php
-					$base_path = FCPATH.UPLOAD_PATH.'products/'.$item->thumbnailname;
-					if(file_exists($base_path) && is_file($base_path)){
-						$imgurl = base_url().UPLOAD_PATH.'products/'.$item->thumbnailname;
-						//list($width, $height, $type, $attr) = getimagesize($base_path);
-						//$marleft = 0;
+					$base_path = site_url('files/thumb/'.$item->default_image_id.'/'.$this->settings->thumbnail_width.'/'.$this->settings->thumbnail_height);
+					$headers = get_headers($base_path, 1);
+					if ($headers[0] == 'HTTP/1.1 200 OK') {
+						$imgurl = $base_path;
 					}else{
 						$imgurl = base_url().$this->module_details['path'].'/img/noimage/no_photo_trans_small.gif';
-						//$marleft = 5;
 					}
 				?>
 				<a href="<?php echo base_url().$this->module?>/product/<?php echo $item->slug;?>">

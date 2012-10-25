@@ -31,6 +31,17 @@ class Products_m extends MY_Model {
         return $query->result();
     }
 
+    public function get_simple($id) {
+        $this->db
+                ->select('p.*, c.name as category_name')
+                ->from('simpleshop_products as p')
+                ->join('simpleshop_categories as c', 'c.id = p.category', 'left')
+                ->where('p.id', $id);
+
+        $query = $this->db->get();
+        return $query->row();
+    }
+
     public function get($id) {
         $this->db
                 ->select('p.*, c.name as category_name, i.`id` as img_id, i.`product_id`, i.`filename`, i.`thumbnailname`, i.`uploadedname`, i.`isdefault` ')
@@ -69,10 +80,9 @@ class Products_m extends MY_Model {
 
     public function get_by_slug($slug) {
         $this->db
-                ->select('p.*, c.name as category_name, i.`id` as img_id, i.`product_id`, i.`filename`, i.`thumbnailname`, i.`uploadedname`, i.`isdefault` ')
+                ->select('p.*, c.name as category_name')
                 ->from('simpleshop_products as p')
                 ->join('simpleshop_categories as c', 'c.id = p.category', 'left')
-                ->join('(select * from '.$this->db->dbprefix("simpleshop_images").' where isdefault = 1) as i', 'i.product_id = p.id', 'left')
                 ->where('p.slug', $slug);
 
         $query = $this->db->get();
@@ -99,6 +109,8 @@ class Products_m extends MY_Model {
         if (isset($custom_field)) {
             $product->custom_fields = $custom_field;
         }
+
+        $product->images = $this->get_images($slug);
 
         return $product;
     }
@@ -152,9 +164,7 @@ class Products_m extends MY_Model {
             'name' => $input['name'],
             'slug' => ($input['slug']) ? $input['slug'] : $this->_check_slug($input['name']),
             'category' => $input['category'],
-            'price' => $input['price'],
-            'thumbnail' => $input['thumbnail'],
-            'image' => $input['image'],
+            'price' => ($input['price'])?$input['price']:0,
             'description' => $input['description']
         );
 
@@ -193,8 +203,6 @@ class Products_m extends MY_Model {
             'slug' => ($input['slug']) ? $input['slug'] : $this->_check_slug($input['name']),
             'category' => $input['category'],
             'price' => $input['price'],
-            'thumbnail' => $input['thumbnail'],
-            'image' => $input['image'],
             'description' => $input['description']
         );
 
@@ -227,6 +235,22 @@ class Products_m extends MY_Model {
 
         $query = $this->db->get();
         return $query->result();
+    }
+
+    public function get_images($id = '') {
+        $this->load->library('files/files');
+        $this->load->model('images_m');
+
+        if(empty($id)){
+            return false;
+        }
+        if(!is_numeric($id)){
+            $row = $this->images_m->get_file_folder_by_slug($id);
+            $id = $row->id;
+        }
+
+        $files = Files::folder_contents($id);
+        return $files['data']['file'];
     }
 
 }

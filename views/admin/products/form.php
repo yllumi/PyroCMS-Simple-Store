@@ -5,8 +5,6 @@
 <section class="item">
 
     <?php echo form_open_multipart($this->uri->uri_string(), 'class="crud"'); ?>
-    <?php echo form_hidden('thumbnail', $products->thumbnail); ?>
-    <?php echo form_hidden('image', $products->image); ?>
 
     <div class="tabs">
 
@@ -98,29 +96,24 @@
 					}
 					?>
                     <li class="<?php echo alternator('', 'even'); ?>">
-                        <label for="file"><?php echo lang('products:image'); ?></label><br /><br />
+                        <div>
+                            <?php 
+                            $upload_id = empty($products->id) ? 0 : $products->id;
+                            $action_path = site_url('admin/' . $this->module . '/ajax_upload_image/'. $upload_id);
+                            echo form_open_multipart($action_path, 'id="ajax-form-upload"'); ?>
+                            <input type="file" name="userfile">&nbsp;
+                            <input type="submit" value="<?php echo lang('products:upload_image'); ?>">
+                            <?php echo form_close(); ?>
+
+                            <div class="progress">
+                                <div class="bar"></div >
+                                <div class="percent">0%</div >
+                            </div>
+                        </div>
+                        <hr />
                         <input type="hidden" id="prm_post_dt" value="<?php echo empty($products->id) ? 0 : $products->id; ?>" />
                         <div id="img_list" style="clear: both; height: <?php echo $this->settings->thumbnail_height ?>;">
-                            <div class="imgBox" id="img_no_img">
-                                <div id="thumbnail" class="imgContent" style="width: <?php echo $this->settings->thumbnail_width ?>;">
-                                    <img src="<?php echo $imgsrc; ?>" alt="<?php echo lang('products:image'); ?>" />
-                                </div>
-                            </div>
-                            <div style="float: left; margin-left: 20px;">
-                                <?php 
-                                $upload_id = empty($products->id) ? 0 : $products->id;
-                                $action_path = site_url('admin/' . $this->module . '/ajax_upload_image/'. $upload_id);
-                                echo form_open_multipart($action_path, 'id="ajax-form-upload"'); ?>
-                                <input type="file" name="file"><br />
-                                <input type="submit" value="<?php echo lang('products:upload_image'); ?>">
-                                <?php echo form_close(); ?>
-
-                                <div class="progress">
-                                    <div class="bar"></div >
-                                    <div class="percent">0%</div >
-                                </div>
-
-                            </div>
+                            <div class="imgBox" id="img_no_img"></div>
                         </div>
                     </li>
                 </ul>

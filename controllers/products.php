@@ -47,25 +47,10 @@ class Products extends Public_Controller {
     }
 
     public function product($slug = null) {
-
         if ($slug)
             $data->items = $this->products_m->get_by_slug($slug);
         else
             redirect('products');
-
-        if (count($data->items)) {
-            $data->items_exist = TRUE;
-            $this->load->model('images_m');
-			$data->items_images = $this->images_m->get_by_product($data->items->id);
-        } else {
-            $data->items_exist = FALSE;
-            $data->items_images = false;
-        }
-
-		
-//		echo "<pre>";
-//		print_r($data);
-//		die();
 
         $data->fields = $this->custom_fields_m->get_all();
 

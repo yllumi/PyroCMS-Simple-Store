@@ -22,6 +22,8 @@ class Admin extends Admin_Controller {
         $this->load->library('form_validation');
         $this->lang->load('general');
         $this->lang->load('products');
+        $this->load->library('files/files');
+        $this->load->model('images_m');
 
         $this->item_validation_rules = array(
             array(
@@ -47,16 +49,6 @@ class Admin extends Admin_Controller {
             array(
                 'field' => 'description',
                 'label' => lang('products:description'),
-                'rules' => 'trim'
-            ),
-            array(
-                'field' => 'thumbnail',
-                'label' => lang('products:thumbnail'),
-                'rules' => 'trim'
-            ),
-            array(
-                'field' => 'image',
-                'label' => lang('products:image'),
                 'rules' => 'trim'
             )
         );
@@ -131,7 +123,7 @@ class Admin extends Admin_Controller {
 
         $categories = $this->products_m->get_categories();
         $fields = $this->products_m->get_fields();
-        $this->load->model('images_m');
+        
         $images = $this->images_m->get_by_product($id);
 
         $this->template->title($this->module_details['name'], lang('products:edit'))
@@ -176,109 +168,56 @@ class Admin extends Admin_Controller {
     }
 
     public function ajax_upload_image($id = '') {
+
 		if(empty($id)){
 			echo json_encode(array('status' => 0));
 		}
 		
-		$this->input->is_ajax_request() ? $this->template->set_layout(FALSE) : '';
-		$this->load->library('upload');
+    	// Get product
+		$row    = $this->products_m->get_simple($id);
+		$folder = $this->images_m->get_file_folder_by_slug($row->slug);
+		$allow  = array('jpeg', 'jpg', 'png', 'gif', 'bmp');
 
-		$upload_path = UPLOAD_PATH . $this->module . '/';
-
-		if (!is_dir($upload_path)) {
-			@mkdir($upload_path, 0777, TRUE);
+		// Create folder?
+		if( !$folder )
+		{
+			$parent = $this->images_m->get_file_folder_by_slug('product-images');
+			$folder = $this->images_m->create_file_folder($parent->id, $row->name, $row->slug);
+			$folder = (object)$folder;
 		}
 
-		if (is_dir($upload_path))
-			$config['upload_path'] = $upload_path;
-		$config['allowed_types'] = 'gif|jpg|jpeg|png|GIF|JPG|JPEG|PNG';
-		$config['remove_spaces'] = TRUE;
-		$config['overwrite'] = TRUE;
-		$config['max_size'] = 0;
-		$config['encrypt_name'] = TRUE;
-		$uploadedname = $_FILES['file']['name'];
-		$config['file_name'] = 'P'.date("YmdHis").rand(10,99).'_'. substr($uploadedname, 0, strrpos($uploadedname, '.'));
-
-		$this->upload->initialize($config);
-
-		if ($this->upload->do_upload('file')) {
-
-			$upload_data = $this->upload->data();
-
-			$this->load->library('image_lib');
-
-			unset($config);
-			$config['source_image'] = $upload_path . $upload_data['file_name'];
-			$config['maintain_ratio'] = TRUE;
-			$config['quality'] = '100%';
-			$config['width'] = $this->settings->thumbnail_width;
-			$config['height'] = $this->settings->thumbnail_height;
-			$config['new_image'] = $upload_path . $upload_data['raw_name'] . '_thumb' . $upload_data['file_ext'];
-
-			if ($upload_data['image_width'] > $upload_data['image_height']) {
-				$config['master_dim'] = 'width';
-			} elseif ($upload_data['image_height'] > $upload_data['image_width']) {
-				$config['master_dim'] = 'height';
-			} else {
-				$config['maintain_ratio'] = TRUE;
-			}
-
-			$this->image_lib->initialize($config);
-			$this->image_lib->resize();
-			$this->image_lib->clear();
-
-			unset($config);
-			$config['image_library'] = 'gd2';
-
-			$image_size = getimagesize($upload_path . $upload_data['raw_name'] . '_thumb' . $upload_data['file_ext']);
-			$config['source_image'] = $upload_path . $upload_data['raw_name'] . '_thumb' . $upload_data['file_ext'];
-
-			$config['x_axis'] = (($image_size[0] - $this->settings->thumbnail_width) / 2);
-			$config['y_axis'] = (($image_size[1] - $this->settings->thumbnail_height) / 2);
-			$config['width'] = $this->settings->thumbnail_width;
-			$config['height'] = $this->settings->thumbnail_height;
-			$config['quality'] = '100%';
-			$config['maintain_ratio'] = FALSE;
-
-			$this->image_lib->initialize($config);
-			$this->image_lib->crop();
-			$this->image_lib->clear();
-
-			$this->load->model("images_m");
-			
-			$rslt = $this->images_m->save_image(array(
-				'product_id'=>$id,
-				'filename'=>$upload_data['raw_name'].$upload_data['file_ext'],
-				'thumbnailname'=>$upload_data['raw_name'] . '_thumb' . $upload_data['file_ext'],
-				'uploadedname' => $uploadedname,
-				'isdefault'=>0
-				));
-			
-			if($rslt){
-				$json_data = array(
-					'status' => 1,
-					'raw_name' => $upload_data['raw_name'],
-					'real_name' => $uploadedname,
-					'thumbnail' => $upload_data['raw_name'] . '_thumb' . $upload_data['file_ext'],
-					'image' => $upload_data['raw_name'] . $upload_data['file_ext'],
-					'ext' => $upload_data['file_ext'],
-					'upload_path' => base_url() . 'uploads/' . SITE_REF . '/' . $this->module . '/',
-					'products_image' => lang("products:image"),
-					'delete_image' => lang("products:delete_x"),
-					'delete_title' => lang("products:delete_image"),
-					'set_default' => lang("products:set_default"),
-					'current_default' => lang("products:current_default"),
-					'image_dt' => $rslt,
-					'thumb_width' => $this->settings->thumbnail_width
-				);
-			}else{
-				$json_data = array(
-					'status' => 0
-				);
-			}
-
-			echo json_encode($json_data);
+		// Check for folder
+		if( is_object($folder) AND ! empty($folder) )
+		{
+			// Upload it
+			$this->input->is_ajax_request() ? $this->template->set_layout(FALSE) : '';
+			$thefile = Files::upload($folder->id);
 		}
+
+		if ($thefile['status']) {
+
+			$json_data = array(
+				'status' => 1,
+				'raw_name' => $thefile['data']['name'],
+				'real_name' => $thefile['data']['filename'],
+				'thumbnail' => site_url("files/thumb/".$thefile['data']['filename']."/0/120"),
+				'image' => $thefile['data']['path'],
+				'ext' => $thefile['data']['extension'],
+				'products_image' => lang("products:image"),
+				'delete_image' => lang("products:delete_x"),
+				'delete_title' => lang("products:delete_image"),
+				'set_default' => lang("products:set_default"),
+				'current_default' => lang("products:current_default"),
+				'image_dt' => $thefile['data']['id']
+			);
+			
+		} else {
+			$json_data = array(
+				'status' => 0
+			);
+		}
+
+		echo json_encode($json_data);
     }
 
     public function ajax_delete_image($id) {
@@ -287,75 +226,65 @@ class Admin extends Admin_Controller {
 			echo json_encode(array('status'=>0));
 			return;
 		}
-        if ($this->input->is_ajax_request()) {
-			
-			$this->load->model("images_m");
-			$row = $this->images_m->get($id);
-			if($row){
-				
-				$rslt = $this->images_m->delete_by(array('id' => $id));
-				if($rslt){
-					@unlink(UPLOAD_PATH . $this->module . '/' . $row->filename);
-					@unlink(UPLOAD_PATH . $this->module . '/' . $row->thumbnailname);
-					$result = array('status'=>1);
-				}else{
-					$result = array('status'=>0);
-				}
-					
-			}else{
-				$result = array('status'=>0);
-			}
-			
-            echo json_encode($result);
-        } else echo json_encode(array('status'=>0));
+
+		// unset this image as default if it is
+		$this->images_m->unset_if_default($id);
+
+		// delete image
+		$row = Files::delete_file($id);
+
+        echo json_encode($row);
     }
 
     public function ajax_images($id = 0) {
-        
-			if(empty($id)){
-				echo json_encode(array('status'=>0));
-				return;
-			}
-			$this->load->model("images_m");
-			$rslt = $this->images_m->get_by_product($id);
-			if($rslt){
-				$newrslt = array();
-				foreach($rslt as $row){
-					$newrslt[] = array(
+		if(empty($id)){
+			echo json_encode(array('status'=>0));
+			return;
+		}
+
+		// Get product
+		$product= $this->products_m->get_simple($id);
+		$folder = $this->images_m->get_file_folder_by_slug($product->slug);
+		$rslt = Files::folder_contents($folder->id);
+
+		//print_r($rslt);
+
+		if($rslt){
+			$newrslt = array();
+			foreach($rslt['data']['file'] as $row){
+				$newrslt[] = array(
 					'image_dt' => $row->id,
-					'image_pdt' => $row->product_id,
-					'image_file' => $row->filename,
-					'image_thumbnail' => $row->thumbnailname,
-					'image_uploaded' => $row->uploadedname,
-					'image_default' => $row->isdefault,
+					'image_pdt' => $id,
+					'image_file' => site_url("files/large/".$row->filename),
+					'image_thumbnail' => site_url("files/thumb/".$row->filename."/0/120"),
+					'image_default' => ($product->default_image_id == $row->id)? 1 : 0,
 					'products_image' => lang("products:image"),
 					'delete_image' => lang("products:delete_x"),
 					'delete_title' => lang("products:delete_image"),
 					'set_default' => lang("products:set_default"),
-					'current_default' => lang("products:current_default"),
-					'thumb_width' => $this->settings->thumbnail_width);
-				}
-				$result = array('status'=>1, 'result'=>$newrslt, 'ipath'=> base_url() . 'uploads/' . SITE_REF . '/' . $this->module . '/');
-			}else{
-				$result = array('status'=>0, 'result'=>'');
+					'current_default' => lang("products:current_default")
+				);
 			}
-			echo json_encode($result);
+			$result = array('status'=>1, 'result'=>$newrslt);
+		}else{
+			$result = array('status'=>0, 'result'=>'');
+		}
+		echo json_encode($result);
     }
 
-    public function ajax_set_default($id = 0) {
-        
-			if(empty($id)){
-				echo json_encode(array('status'=>0));
-				return;
-			}
-			$this->load->model("images_m");
-			$rslt = $this->images_m->set_default_image($id);
-			if($rslt){
-				$result = array('status'=>1);
-			}else{
-				$result = array('status'=>0);
-			}
-			echo json_encode($result);
+    public function ajax_set_default($id = '') {
+		if(empty($id)){
+			echo json_encode(array('status'=>0));
+			return;
+		}
+
+		$rslt = $this->images_m->set_default_image($id);
+		if($rslt){
+			$result = array('status'=>1);
+		}else{
+			$result = array('status'=>0);
+		}
+		echo json_encode($result);
     }
 
 }
