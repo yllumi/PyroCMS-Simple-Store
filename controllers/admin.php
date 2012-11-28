@@ -124,7 +124,7 @@ class Admin extends Admin_Controller {
         $categories = $this->products_m->get_categories();
         $fields = $this->products_m->get_fields();
         
-        $images = $this->images_m->get_by_product($id);
+        //$images = $this->images_m->get_file_folder_by_slug($id);
 
         $this->template->title($this->module_details['name'], lang('products:edit'))
                 ->append_metadata($this->load->view('fragments/wysiwyg', $this->data, TRUE))
@@ -133,7 +133,7 @@ class Admin extends Admin_Controller {
                 ->append_js('module::image.js')
                 ->set('products', $products)
                 ->set('fields', $fields)
-                ->set('images', $images)
+                //->set('images', $images)
                 ->set('categories', $categories)
                 ->build('admin/' . $this->module . '/form');
     }

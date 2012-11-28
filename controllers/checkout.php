@@ -78,7 +78,7 @@ class Checkout extends Public_Controller {
             'qty' => $data['items']['qty'],
             'price' => $data['items']['price'],
             'name' => $data['items']['name'],
-            'options' => ($data['items']['custom_fields'])?$data['items']['custom_fields']:null
+            'options' => isset($data['items']['custom_fields'])?$data['items']['custom_fields']:null
         );
 
         $this->cart->insert($cart);

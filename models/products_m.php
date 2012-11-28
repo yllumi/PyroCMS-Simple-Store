@@ -20,10 +20,9 @@ class Products_m extends MY_Model {
 
     public function get_all() {
         $this->db
-                ->select('p.*, c.name as category_name, i.`id` as img_id, i.`product_id`, i.`filename`, i.`thumbnailname`, i.`uploadedname`, i.`isdefault` ')
+                ->select('p.*, c.name as category_name')
                 ->from('simpleshop_products as p')
                 ->join('simpleshop_categories as c', 'c.id = p.category', 'left')
-                ->join('(select * from '.$this->db->dbprefix("simpleshop_images").' where isdefault = 1) as i', 'i.product_id = p.id', 'left')
                 ->order_by('category_name', 'asc')
                 ->order_by('name', 'asc');
 
@@ -44,10 +43,9 @@ class Products_m extends MY_Model {
 
     public function get($id) {
         $this->db
-                ->select('p.*, c.name as category_name, i.`id` as img_id, i.`product_id`, i.`filename`, i.`thumbnailname`, i.`uploadedname`, i.`isdefault` ')
+                ->select('p.*, c.name as category_name')
                 ->from('simpleshop_products as p')
                 ->join('simpleshop_categories as c', 'c.id = p.category', 'left')
-                ->join('(select * from '.$this->db->dbprefix("simpleshop_images").' where isdefault = 1) as i', 'i.product_id = p.id', 'left')
                 ->where('p.id', $id);
 
         $query = $this->db->get();

@@ -19,31 +19,6 @@ class Images_m extends MY_Model {
         $this->load->library('files/files');
     }
 
-    public function get($id) {
-        $this->db
-                ->select('i.*')
-                ->from('simpleshop_images as i')
-                ->where('i.id', $id);
-
-        $query = $this->db->get();
-        $product = $query->row();
-
-        return $product;
-    }
-
-    public function get_by_product($id) {
-        $this->db
-                ->select('i.*')
-                ->from('simpleshop_images as i')
-                ->where('i.product_id', $id)
-                ->order_by('filename', 'asc');
-
-        $query = $this->db->get();
-        $products = $query->result();
-
-        return $products;
-    }
-
     public function save_image($prm = array()) {
 
         $result = $this->db->insert($this->_table, $prm);

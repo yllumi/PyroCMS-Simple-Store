@@ -10,9 +10,10 @@
 
 			<div class="product-images">
 			<?php
-				$imgurl = site_url('files/large/'.$items->images[0]->filename);
-				$imghtml = '<img src="'.$imgurl.'" />';
-				echo $imghtml;
+				foreach($items->images as $item):
+				$imgurl = site_url('files/large/'.$item->filename.'/250/250');
+				echo '<img src="'.$imgurl.'" />';
+				endforeach;
 			?>
 			</div>
 			<div class="product-details">
@@ -35,7 +36,6 @@
 				<span>
 					<form action="<?php echo site_url('products/checkout/add_to_cart/' . $items->slug) ?>" method="POST">
 						<input type="text" name="qty" size="5" maxlength="2" placeholder="qty" value="1" class="verysmall" />
-						<br class="cboth"/>
 						<button class="bbtn green">Masukkan ke Keranjang</button>
 					</form>
 				</span><br class="cboth"/>
