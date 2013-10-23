@@ -8,6 +8,8 @@
 </section>
 
 <section class="item">
+    <div class="content">
+
     <table>
         <thead>
             <tr class="title"><th width="150px"><?php echo lang('orders:order_code'); ?></th>
@@ -66,6 +68,8 @@
             </tr>
         </tbody>
     </table>
+    
+    </div>
 </section>
 
 <style>

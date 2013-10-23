@@ -375,6 +375,31 @@ class Module_Products extends Module {
             //return FALSE;
         //}
 
+        $email = array(
+            array(
+                'slug' => 'order-invoice',
+                'name' => 'Order Invoice',
+                'description' => 'Pesan invoice pemesanan yang dikirimkan kepada pelanggan',
+                'subject' => 'Order Invoice',
+                'body' => "<p>Terima kasih telah memesan produk kami! :D</p>\n\n<p>Produk yang Anda pesan diantaranya adalah:</p>\n{{ order_items }} {{ /order_items }}\n\n<table border=\"1\" cellpadding=\"6\" cellspacing=\"1\" style=\"width:100%\">\n <tbody>\n       <tr>\n          <th>Prod. ID</th>\n         <th>QTY</th>\n          <th>Item Description</th>\n         <th style=\"text-align:right\">Item Price</th>\n          <th style=\"text-align:right\">Sub-Total</th>\n       </tr>\n     <tr>\n          <td>{{ id }}</td>\n         <td>{{ qty }}</td>\n            <td>{{ name }}</td>\n           <td>{{ settings:currency }} {{ price }}</td>\n          <td>{{ settings:currency }} {{ subtotal }}</td>\n       </tr>\n </tbody>\n</table>\n\n<p>Untuk selanjutnya silakan Anda melakukan pembayaran sebesar <strong>{{ settings:currency }} {{ total }}</strong> ke nomor rekening berikut:</p>\n\n<blockquote><strong>Bank: </strong>{{ settings:bank_transfer }}<br />\n<strong>No. Rekening: </strong>{{ settings:rekening }}<br />\n<strong>a.n. </strong>{{ settings:rekening_owner }}</blockquote>\nSetelah Anda mengirimkan pembayaran, segera lakukan konfirmasi via SMS ke nomor <strong>{{ settings:shop_phone }}</strong> dengan isi nama dan kode order, yakni sebagai berikut:\n\n<blockquote style=\"background: lightsteelblue\"><strong>{{ customer:firstname }} {{ customer:lastname }} {{ ordercode }}</strong></blockquote>\nKami akan mengirimkan produk pesanan Anda ke alamat yang tertera di atas segera setelah kami menerima pembayaran dari Anda.\n\n<p>&nbsp;</p>\n\n<p style=\"margin-bottom: 80px;\">Terima kasih.</p>",
+                'lang' => 'en',
+                'is_default' => 0,
+                'module' => 'products'
+            ),
+            array(
+                'slug' => 'order-notification',
+                'name' => 'Order Notification',
+                'description' => 'Notifikasi pembelian ke admin toko',
+                'subject' => '{{ settings:site_name }} - Notifikasi Pemesanan',
+                'body' => "<p>Selamat, produk ada ada yang pesan!</p>\n\n<p>Produk dipesan oleh&nbsp;{{ customer:firstname }} {{ customer:lastname }} dengan kode pesan <strong>{{ ordercode }}.</strong></p>\n\n<p>Produk dipesan diantaranya adalah:</p>\n{{ order_items }} {{ /order_items }}\n\n<table border=\"1\" cellpadding=\"6\" cellspacing=\"1\" style=\"width:100%\">\n  <tbody>\n       <tr>\n          <th>Prod. ID</th>\n         <th>QTY</th>\n          <th>Item Description</th>\n         <th style=\"text-align:right\">Item Price</th>\n          <th style=\"text-align:right\">Sub-Total</th>\n       </tr>\n     <tr>\n          <td>{{ id }}</td>\n         <td>{{ qty }}</td>\n            <td>{{ name }}</td>\n           <td>{{ settings:currency }} {{ price }}</td>\n          <td>{{ settings:currency }} {{ subtotal }}</td>\n       </tr>\n </tbody>\n</table>\n\n<p>Total pembelian:&nbsp;<strong>{{ settings:currency }} {{ total }}</strong>.</p>\n\n<p>Silakan ditindaklanjuti dengan menunggu konfirmasi pembayaran ke nomor {{ settings:shop_phone }}, kemudian periksa biaya transfer di rekening:</p>\n\n<blockquote><strong>Bank: </strong>{{ settings:bank_transfer }}<br />\n<strong>No. Rekening: </strong>{{ settings:rekening }}<br />\n<strong>a.n. </strong>{{ settings:rekening_owner }}</blockquote>\n\n<p>Dan segera kirimkan paket produk yang dipesan ke alamat tujuan.</p>\n\n<p>Detail pemesanan selanjutnya dapat dilihat di halaman admin situs Anda <a href=\"{{ url:site }}admin/products/orders/view/{{ ordercode }}\">{{ url:site }}admin/products/orders/view/{{ ordercode }}</a>.</p>\n\n<p style=\"margin-bottom: 80px;\">Terima kasih.</p>",
+                'lang' => 'en',
+                'is_default' => 0,
+                'module' => 'products'
+            )
+        );
+        
+        $this->db->insert_batch('email_templates', $email);
+
         return TRUE;
     }
 
@@ -390,9 +415,9 @@ class Module_Products extends Module {
         $this->dbforge->drop_table('simpleshop_order_status');
         $this->dbforge->drop_table('simpleshop_customers');
         $this->dbforge->drop_table('simpleshop_images');
-        
 
         $this->db->delete('settings', array('module' => 'products'));
+        $this->db->delete('email_templates', array('module'=>'products'));
 
         return TRUE;
     }

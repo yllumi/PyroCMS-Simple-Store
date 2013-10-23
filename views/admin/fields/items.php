@@ -3,6 +3,8 @@
 </section>
 
 <section class="item">
+	<div class="content">
+
 	<?php echo form_open('admin/products/fields/delete');?>
 	
 	<?php if (!empty($items)): ?>
@@ -46,4 +48,5 @@
 	<?php endif;?>
 	
 	<?php echo form_close(); ?>
+	</div>
 </section>

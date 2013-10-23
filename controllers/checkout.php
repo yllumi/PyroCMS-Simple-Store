@@ -129,7 +129,7 @@ class Checkout extends Public_Controller {
         // set some data for sending email
         $data['customer'] = $this->session->userdata('customer');
         $data['subject']    = $this->settings->site_name . ' - Order Invoice';
-        $data['slug']       = 'order_invoice';
+        $data['slug']       = 'order-invoice';
         $data['to']         = $data['customer']['email'];
         $data['from']       = $this->settings->server_email;
         $data['name']       = $this->settings->site_name;
@@ -143,7 +143,7 @@ class Checkout extends Public_Controller {
 
         // then send email notification to admin
         $data2['subject']    = $this->settings->site_name . ' - Order Notification';
-        $data2['slug']       = 'Order Notification';
+        $data2['slug']       = 'order-notification';
         $data2['to']         = $this->settings->contact_email;
         $data2['from']       = $this->settings->server_email;
         $data2['name']       = $data['customer']['firstname'].' di '.$this->settings->site_name;

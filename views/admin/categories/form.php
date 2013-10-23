@@ -3,6 +3,7 @@
 </section>
 
 <section class="item">
+	<div class="content">
 
 	<?php echo form_open_multipart($this->uri->uri_string(), 'class="crud"'); ?>
    
@@ -27,4 +28,5 @@
        
 	<?php echo form_close(); ?>
 
+</div>
 </section>

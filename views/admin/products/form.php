@@ -3,7 +3,8 @@
 </section>
 
 <section class="item">
-
+    <div class="content">
+        
     <?php echo form_open_multipart($this->uri->uri_string(), 'class="crud"'); ?>
 
     <div class="tabs">
@@ -120,6 +121,8 @@
             </fieldset>
         </div>
     </div>
+
+</div>
 
 </section>
 
