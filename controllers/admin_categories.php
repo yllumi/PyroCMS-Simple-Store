@@ -69,7 +69,7 @@ class Admin_categories extends Admin_Controller
 
 		$this->template
 			->title($this->module_details['name'], lang('categories:create'))
-			->append_metadata( $this->load->view('fragments/wysiwyg', $this->data, TRUE) )
+			->append_metadata( $this->load->view('fragments/wysiwyg', null, TRUE) )
 			->set('categories', $categories)
 			->build('admin/categories/form');
 	}
@@ -101,7 +101,7 @@ class Admin_categories extends Admin_Controller
 		
 		$this->template
 			->title($this->module_details['name'], lang('categories:edit'))
-			->append_metadata( $this->load->view('fragments/wysiwyg', $this->data, TRUE) )
+			->append_metadata( $this->load->view('fragments/wysiwyg', null, TRUE) )
 			->set('categories', $categories)
 			->build('admin/categories/form');
 	}

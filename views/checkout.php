@@ -19,7 +19,7 @@
             <?php echo form_hidden($i . '[rowid]', $items['rowid']); ?>
 
             <tr>
-                <td><?php echo form_input(array('name' => $i . '[qty]', 'value' => $items['qty'], 'maxlength' => '3', 'class' => 'verysmall')); ?></td>
+                <td><?php echo form_input(array('name' => $i . '[qty]', 'value' => $items['qty'], 'maxlength' => '3')); ?></td>
                 <td><?php echo $items['name']; ?></td>
                 <td style="text-align:right"><?php echo $this->settings->currency . ' ' . number_format($items['price'], $this->settings->decimal_point, $this->settings->decimal_separator, $this->settings->thousand_separator); ?></td>
                 <td style="text-align:right"><?php echo $this->settings->currency . ' ' . number_format($items['subtotal'], $this->settings->decimal_point, $this->settings->decimal_separator, $this->settings->thousand_separator); ?></td>

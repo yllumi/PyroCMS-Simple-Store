@@ -17,28 +17,27 @@
 			?>
 			</div>
 			<div class="product-details">
-				<label><?php echo lang('products:category'); ?></label>
-				<span><?php echo $items->category_name ? $items->category_name : lang('products:no_category'); ?></span><br class="cboth"/>
+				<dt><?php echo lang('products:category'); ?></dt>
+				<dd><?php echo $items->category_name ? $items->category_name : lang('products:no_category'); ?></dd>
 				
-				<label><?php echo lang('products:price'); ?></label>
-				<span><?php echo $currency . ' ' . number_format($items->price, $this->settings->decimal_point, $this->settings->decimal_separator, $this->settings->thousand_separator); ?></span><br class="cboth"/>
+				<dt><?php echo lang('products:price'); ?></dt>
+				<dd><?php echo $currency . ' ' . number_format($items->price, $this->settings->decimal_point, $this->settings->decimal_separator, $this->settings->thousand_separator); ?></dd>
 				
 				<?php foreach ($fields as $field) : ?>
-				<label><?php echo $field->name; ?></label>
-				<span><?php echo $items->custom_fields[$field->id]; ?></span><br class="cboth"/>
+				<dt><?php echo $field->name; ?></dt>
+				<dd><?php echo $items->custom_fields[$field->id]; ?></dd>
 				<?php endforeach; ?>
 				
-				<label><?php echo lang('products:description') ?></label>
-				<span><?php echo $items->description; ?></span><br class="cboth"/>
-				
-				
-				<label><?php echo lang('products:quantity') ?>Kuantitas</label>
-				<span>
-					<form action="<?php echo site_url('products/checkout/add_to_cart/' . $items->slug) ?>" method="POST">
-						<input type="text" name="qty" size="5" maxlength="2" placeholder="qty" value="1" class="verysmall" />
-						<button class="bbtn green">Masukkan ke Keranjang</button>
-					</form>
-				</span><br class="cboth"/>
+				<dt><?php echo lang('products:description') ?></dt>
+				<dd><?php echo $items->description; ?></dd>
+
+				<form action="<?php echo site_url('products/checkout/add_to_cart/' . $items->slug) ?>" method="POST" class="addtocart-form">
+					<dt><?php echo lang('products:quantity') ?>Kuantitas</dt>
+					<dd>
+						<input type="text" name="qty" maxlength="2" placeholder="qty" value="1" />
+						<button class="button">Add to Cart</button>
+					</dd>
+				</form>
 		
 			</div>
 			

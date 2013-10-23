@@ -18,7 +18,7 @@ class Module_Products extends Module {
             ),
             'frontend' => TRUE,
             'backend' => TRUE,
-            'menu' => 'store',
+            'menu' => 'content',
             'roles' => array('manage_orders', 'manage_custom_fields', 'manage_specials'),
             'sections' => array(
                 'products' => array(
@@ -122,7 +122,7 @@ class Module_Products extends Module {
                 'description' => array('type' => 'TEXT'),
                 'price' => array('type' => 'INT', 'constraint' => 11, 'null' => true),
                 'min_buy' => array('type' => 'INT', 'constraint' => 11, 'default' => 1),
-                'default_image_id' => array('type' => 'INT', 'constraint' => 11, 'default' => 0)
+                'default_image_id' => array('type' => 'VARCHAR', 'constraint' => 20, 'default' => 0)
             ),
             'simpleshop_categories' => array(
                 'id' => array('type' => 'INT', 'constraint' => 11, 'auto_increment' => true, 'primary' => true),

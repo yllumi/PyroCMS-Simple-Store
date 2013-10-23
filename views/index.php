@@ -9,7 +9,7 @@
 		<div class="products-data">
 			
 			<?php foreach($items as $item) : ?>
-			<div class="product-item bx green">
+			<div class="product-item">
 				<?php
 					$base_path = site_url('files/thumb/'.$item->default_image_id.'/'.$this->settings->thumbnail_width.'/'.$this->settings->thumbnail_height);
 					$headers = get_headers($base_path, 1);

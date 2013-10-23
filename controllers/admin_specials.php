@@ -20,9 +20,6 @@ class Admin_specials extends Admin_Controller
 		$this->lang->load('general');
 		$this->lang->load('specials');
 		$this->lang->load('products');
-		
-		$this->data->hours = array_combine($hours = range(0, 23), $hours);
-		$this->data->minutes = array_combine($minutes = range(0, 59), $minutes);
 
 		$this->item_validation_rules = array(
 			array(
@@ -95,13 +92,13 @@ class Admin_specials extends Admin_Controller
 
 		$this->template
 			->title($this->module_details['name'], lang('specials:create'))
-			->append_metadata( $this->load->view('fragments/wysiwyg', $this->data, TRUE) )
+			->append_metadata( $this->load->view('fragments/wysiwyg', null, TRUE) )
 			->append_js('module::jquery.cookie.js')
 			->append_js('module::form.js')
 			->append_js('module::specials.js')
 			->set('products', $products)
 			->set('specials', $specials)
-			->build('admin/specials/form', $this->data);
+			->build('admin/specials/form');
 	}
 	
 	public function ajax_add_product()
@@ -136,8 +133,8 @@ class Admin_specials extends Admin_Controller
 	public function ajax_get_special_product()
 	{
 		if($this->input->is_ajax_request()) {
-			$this->data->products = $this->specials_m->get_special_product($this->input->get('id'));
-			echo(json_encode($this->data->products));
+			$products = $this->specials_m->get_special_product($this->input->get('id'));
+			echo(json_encode($products));
 		}
 	}
 	
@@ -172,13 +169,13 @@ class Admin_specials extends Admin_Controller
 		$products = $this->specials_m->get_products();
 		
 		$this->template->title($this->module_details['name'], lang('specials:edit'))
-			->append_metadata( $this->load->view('fragments/wysiwyg', $this->data, TRUE) )
+			->append_metadata( $this->load->view('fragments/wysiwyg', null, TRUE) )
 			->append_js('module::jquery.cookie.js')
 			->append_js('module::form.js')
 			->append_js('module::specials.js')
 			->set('products', $products)
 			->set('specials', $specials)
-			->build('admin/specials/form', $this->data);
+			->build('admin/specials/form');
 	}
 	
 	public function delete($id = 0)
